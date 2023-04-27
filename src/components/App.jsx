@@ -129,7 +129,7 @@ class App extends Component {
             <h2 style={{ textAlign: 'center' }}>Sorry, nothing was found...</h2>
           )}
 
-          {total / 12 > page && (
+          {total / 12 > page && !loading && (
             <Button text="Load more" onClick={this.onLoadMore} />
           )}
         </AppBox>
