@@ -98,14 +98,9 @@ class App extends Component {
         <AppBox>
           <Searchbar onSubmit={this.onSubmitForm} />
 
-          {!loading && (
-            <ImageGallery>
-              <ImageGalleryItem
-                images={images}
-                toggleModal={this.toggleModal}
-              />
-            </ImageGallery>
-          )}
+          <ImageGallery>
+            <ImageGalleryItem images={images} toggleModal={this.toggleModal} />
+          </ImageGallery>
 
           {error && <h2>{error}</h2>}
 
