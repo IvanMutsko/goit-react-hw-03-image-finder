@@ -14,8 +14,6 @@ const scrollDown = page => {
     .querySelector('ul')
     .firstElementChild.getBoundingClientRect();
 
-  console.log(page);
-
   const heightDown = cardHeight * 3 * page;
 
   window.scrollTo({
@@ -29,21 +27,21 @@ class App extends Component {
     images: [],
     searchWord: '',
     page: 1,
+    total: 1,
     isModalOpen: false,
     largeImageURL: '',
     imageTags: '',
     loading: false,
-    error: null,
+    error: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.searchWord !== this.state.searchWord ||
-      prevState.page !== this.state.page
-    ) {
+    const { searchWord, page } = this.state;
+
+    if (prevState.searchWord !== searchWord || prevState.page !== page) {
       this.setState({ loading: true });
 
-      this.fetchPhotos(this.state.searchWord, this.state.page);
+      this.fetchPhotos(searchWord, page);
     }
   }
 
@@ -59,11 +57,15 @@ class App extends Component {
     try {
       this.setState({ loading: true, error: null });
       const fetchedPhotos = await fetchAPI(searchWord, page);
+
       this.setState(prevState => ({
         images: [...prevState.images, ...fetchedPhotos.hits],
+        total: fetchedPhotos.total,
       }));
     } catch (error) {
-      this.setState({ error: 'ERRRRRRROR' });
+      this.setState({
+        error: 'An error occurred, please try again later...',
+      });
     } finally {
       this.setState({ loading: false });
     }
@@ -96,31 +98,48 @@ class App extends Component {
   };
 
   render() {
+    const {
+      loading,
+      images,
+      error,
+      total,
+      page,
+      isModalOpen,
+      largeImageURL,
+      imageTags,
+    } = this.state;
+
     return (
       <>
         <AppBox>
           <Searchbar onSubmit={this.onSubmitForm} />
 
-          {!this.state.loading && (
+          {!loading && (
             <ImageGallery>
               <ImageGalleryItem
-                images={this.state.images}
+                images={images}
                 toggleModal={this.toggleModal}
               />
             </ImageGallery>
           )}
 
-          {this.state.images.length !== 0 ? (
+          {error && <h2>{error}</h2>}
+
+          {total === 0 && (
+            <h2 style={{ textAlign: 'center' }}>Sorry, nothing was found...</h2>
+          )}
+
+          {total / 12 > page && (
             <Button text="Load more" onClick={this.onLoadMore} />
-          ) : null}
+          )}
         </AppBox>
 
-        {this.state.loading && <Loader />}
+        {loading && <Loader />}
 
-        {this.state.isModalOpen && (
+        {isModalOpen && (
           <ModalWindow
-            imageURL={this.state.largeImageURL}
-            imageTags={this.state.imageTags}
+            imageURL={largeImageURL}
+            imageTags={imageTags}
             toggleModal={this.toggleModal}
           />
         )}
