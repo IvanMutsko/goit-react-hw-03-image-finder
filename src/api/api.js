@@ -22,6 +22,6 @@ export const fetchAPI = async (searchRequest, page) => {
 
     return photos;
   } catch (error) {
-    console.log(error);
+    throw new Error(error);
   }
 };
