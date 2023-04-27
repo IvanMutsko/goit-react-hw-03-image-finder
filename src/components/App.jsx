@@ -9,19 +9,6 @@ import { Button } from './Button/Button';
 import { ModalWindow } from './ModalWindow/ModalWindow';
 import { Loader } from './Loader/Loader';
 
-const scrollDown = page => {
-  const { height: cardHeight } = document
-    .querySelector('ul')
-    .firstElementChild.getBoundingClientRect();
-
-  const heightDown = cardHeight * 3 * page;
-
-  window.scrollTo({
-    top: heightDown,
-    behavior: 'smooth',
-  });
-};
-
 class App extends Component {
   state = {
     images: [],
@@ -72,12 +59,9 @@ class App extends Component {
   };
 
   onLoadMore = () => {
-    this.setState(
-      prevPage => ({
-        page: prevPage.page + 1,
-      }),
-      scrollDown(this.state.page)
-    );
+    this.setState(prevPage => ({
+      page: prevPage.page + 1,
+    }));
   };
 
   toggleModal = (largeImageURL, tags) => {
