@@ -74,7 +74,7 @@ class App extends Component {
   onLoadMore = () => {
     this.setState(
       prevPage => ({
-        page: (prevPage.page += 1),
+        page: prevPage.page + 1,
       }),
       scrollDown(this.state.page)
     );
