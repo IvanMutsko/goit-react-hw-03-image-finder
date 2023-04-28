@@ -61,26 +61,18 @@ class App extends Component {
     }));
   };
 
-  toggleModal = (largeImageURL = '', tags = '') => {
-    this.setState(({ isModalOpen }) => {
+  toggleModal = (largeImage = '', tags = '') => {
+    this.setState(() => {
       return {
-        largeImageURL: largeImageURL,
+        largeImageURL: largeImage,
         imageTags: tags,
       };
     });
   };
 
   render() {
-    const {
-      loading,
-      images,
-      error,
-      total,
-      page,
-      isModalOpen,
-      largeImageURL,
-      imageTags,
-    } = this.state;
+    const { loading, images, error, total, page, largeImageURL, imageTags } =
+      this.state;
 
     return (
       <>
