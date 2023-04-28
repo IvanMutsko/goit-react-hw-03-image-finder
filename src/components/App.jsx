@@ -15,7 +15,6 @@ class App extends Component {
     searchWord: '',
     page: 1,
     total: 1,
-    isModalOpen: false,
     largeImageURL: '',
     imageTags: '',
     loading: false,
@@ -26,8 +25,6 @@ class App extends Component {
     const { searchWord, page } = this.state;
 
     if (prevState.searchWord !== searchWord || prevState.page !== page) {
-      this.setState({ loading: true });
-
       this.fetchPhotos(searchWord, page);
     }
   }
@@ -47,7 +44,7 @@ class App extends Component {
 
       this.setState(prevState => ({
         images: [...prevState.images, ...fetchedPhotos.hits],
-        total: fetchedPhotos.total,
+        total: fetchedPhotos.totalHits,
       }));
     } catch (error) {
       this.setState({
@@ -64,19 +61,11 @@ class App extends Component {
     }));
   };
 
-  toggleModal = (largeImageURL, tags) => {
+  toggleModal = (largeImageURL = '', tags = '') => {
     this.setState(({ isModalOpen }) => {
-      if (!this.state.isModalOpen) {
-        return {
-          isModalOpen: !isModalOpen,
-          largeImageURL: largeImageURL,
-          imageTags: tags,
-        };
-      }
       return {
-        isModalOpen: !isModalOpen,
-        largeImageURL: '',
-        imageTags: '',
+        largeImageURL: largeImageURL,
+        imageTags: tags,
       };
     });
   };
@@ -115,7 +104,7 @@ class App extends Component {
 
         {loading && <Loader />}
 
-        {isModalOpen && (
+        {largeImageURL && (
           <ModalWindow
             imageURL={largeImageURL}
             imageTags={imageTags}

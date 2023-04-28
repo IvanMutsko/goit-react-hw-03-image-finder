@@ -16,11 +16,17 @@ export class ModalWindow extends Component {
     }
   };
 
+  handleClick = evt => {
+    if (evt.target === evt.currentTarget) {
+      this.props.toggleModal();
+    }
+  };
+
   render() {
-    const { imageURL, imageTags, toggleModal } = this.props;
+    const { imageURL, imageTags } = this.props;
 
     return (
-      <Overlay onClick={toggleModal}>
+      <Overlay onClick={this.handleClick}>
         <Modal>
           <img src={imageURL} alt={imageTags} />
         </Modal>
